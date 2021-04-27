@@ -5,6 +5,6 @@ public class Ten extends Card implements Actionable{
 
     @Override
     public void action(GameParameters gameParameters) {
-        gameParameters.setStep(-1);
+        gameParameters.setStep((-1) * gameParameters.getStep());
     }
 }

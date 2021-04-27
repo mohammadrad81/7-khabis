@@ -14,21 +14,22 @@ public class Bot extends Player{
                 hand.get(i).getSign().equals(sign)){
                 Card card = hand.get(i);
                 hand.remove(card);
+                System.out.println("bot played " + card.toString());
                 return card;
             }
 
         }
         return null;
     }
-    @Override
-    public Card playAnyOfAColor(String colorName){
-        for(Card card : getHand()){
-            if(card.getColorName().equals(colorName)){
-                return card;
-            }
-        }
-        return null;
-    }
+//
+//    public Card playAnyOfAColor(String colorName){
+//        for(Card card : getHand()){
+//            if(card.getColorName().equals(colorName)){
+//                return card;
+//            }
+//        }
+//        return null;
+//    }
     @Override
     public Card play7(){
         ArrayList<Card> hand = super.getHand();
@@ -46,7 +47,7 @@ public class Bot extends Player{
         do{
             punishingPlayer = players.get(random.nextInt(players.size()));
         }while (punishingPlayer == this);
-
+        System.out.println(this.getName() + "  punished  " + punishingPlayer.getName());
         return punishingPlayer;
     }
 
@@ -55,13 +56,17 @@ public class Bot extends Player{
             Random random = new Random();
             int nextColorIndex = random.nextInt(4) + 1;
         if (nextColorIndex == 1) {
+            System.out.println("bot choice is color black " );
             return (ColorNames.BLACK_NAME);
         } else if (nextColorIndex == 2) {
+            System.out.println("bot choice is color red ");
             return (ColorNames.RED_NAME);
         } else if (nextColorIndex == 3) {
+            System.out.println("bot choice is color green ");
             return (ColorNames.GREEN_NAME);
         }
         else {
+            System.out.println("bot choice is color blue ");
             return (ColorNames.BLUE_NAME);
         }
     }

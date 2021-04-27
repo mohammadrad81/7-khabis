@@ -59,7 +59,7 @@ public class Game {
         return initializedPlayers;
     }
 
-    public void gameBegins(){
+    public void gameBegins() throws InterruptedException {
         boolean mustPlay7 = false;
         Card playingCard = null;
         giveEachPlayer7Cards(players);
@@ -71,20 +71,19 @@ public class Game {
         currentPlayer = players.get(0);
 
        do{
-           validColorName = lastCard.getColorName();
-           validSign = lastCard.getSign();
            if(gameParameters.isJump()){
                currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
                resetGameParameters();
+               delay();
+               continue;
            }
 
            if(gameParameters.isPrize()){
                currentPlayer = nextPlayer(currentPlayer , (-1) * gameParameters.getStep());
                resetGameParameters();
+               delay();
+               continue;
            }
-
-           System.out.println(currentPlayer.getName());
-           System.out.println("Score : " + currentPlayer.getScore());
 
 
            if(gameParameters.isChooseToPunish()){
@@ -92,66 +91,80 @@ public class Game {
                punishSomeOneForCard2(currentPlayer);
                resetGameParameters();
                currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
+               delay();
                continue;
            }
            if(gameParameters.isChooseColor()){
                currentPlayer = nextPlayer(currentPlayer , (-1) * gameParameters.getStep());
                validColorName = currentPlayer.chooseColorName();
+               validSign = lastCard.getSign();
                currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
+               resetGameParameters();
+               delay();
+               continue;
            }
-           if(! gameParameters.getNextColor().equals("")){
-               validColorName = gameParameters.getNextColor();
-           }
+
+           System.out.println(currentPlayer.getName());
+           System.out.println("Score : " + currentPlayer.getScore());
+           System.out.println("valid sign is " + validSign);
+           System.out.println("valid color is " + validColorName);
+           printDirection();
+           printLastCard();
+
            if(gameParameters.getPunishNext() != 0){
                 if(currentPlayer.has7()){
                     mustPlay7 = true;
                 }
                 else{
+                    System.out.println( currentPlayer.getName() + " cards are : ");
                     currentPlayer.printHand();
                     punishPlayerForCard7(gameParameters.getPunishNext());
                     if(! currentPlayer.has7()){
                         currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
                         resetGameParameters();
+                        delay();
                         continue;
                     }
                 }
            }
 
-
-           printLastCard();
            currentPlayer.printHand();
+
            if(mustPlay7){
                System.out.println("!! player must play card 7 !! ");
                 playingCard = currentPlayer.play7();
+                resetGameParameters();
            }
 
            else{
                 playingCard = currentPlayer.chooseFromHand(validSign , validColorName);
            }
 
-           if(!(gameParameters.getNextColor().equals(""))){
-               if(currentPlayer.hasCardsOfTheColor(gameParameters.getNextColor())){
-                   currentPlayer.playAnyOfAColor(gameParameters.getNextColor());
-               }
-               else{
-                   Card addingCard = cardDeck.giveOneCard();
-                   System.out.println(currentPlayer.getName() + " took a card from card deck");
-                   currentPlayer.takeACard(addingCard);
-                   System.out.println("now hand of " + currentPlayer.getName() + "is : ");
-                   currentPlayer.printHand();
-                   if(addingCard.getColorName().equals(gameParameters.getNextColor())){
-                       System.out.println(currentPlayer.getName() + " took a playable card" + addingCard.toString() + "and played it");
-                       playingCard = addingCard;
-                       currentPlayer.getHand().remove(addingCard);
-                       cardDeck.addCardsToDeck(addingCard);
-                   }
-                   else {
-                       System.out.println( currentPlayer.getName() + " can not play the taken card");
-                   }
-               }
-           }
+//           if(!(gameParameters.getNextColor().equals(""))){
+//
+//               if(currentPlayer.hasCardsOfTheColor(gameParameters.getNextColor())){
+//                   currentPlayer.playAnyOfAColor(gameParameters.getNextColor());
+//               }
+//
+//               else{
+//                   Card addingCard = cardDeck.giveOneCard();
+//                   System.out.println(currentPlayer.getName() + " took a card from card deck");
+//                   currentPlayer.takeACard(addingCard);
+//                   System.out.println("now hand of " + currentPlayer.getName() + "is : ");
+//                   currentPlayer.printHand();
+//                   if(addingCard.getColorName().equals(gameParameters.getNextColor())){
+//                       System.out.println(currentPlayer.getName() + " took a playable card" + addingCard.toString() + "and played it");
+//                       playingCard = addingCard;
+//                       currentPlayer.getHand().remove(addingCard);
+//                       cardDeck.addCardsToDeck(addingCard);
+//                   }
+//                   else {
+//                       System.out.println( currentPlayer.getName() + " can not play the taken card");
+//                   }
+//               }
+//           }
 
-           if(playingCard == null && gameParameters.getNextColor().equals("")){
+           if(playingCard == null){
                System.out.println("player picks a card from card deck");
                Card addingCard = cardDeck.giveOneCard();
                currentPlayer.takeACard(addingCard);
@@ -185,12 +198,16 @@ public class Game {
 
            currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
 
+           validColorName = lastCard.getColorName();
+           validSign = lastCard.getSign();
+
+           System.out.println();
+           System.out.println();
+           delay();
        }while (getWinnerIndex() == -1);
 
        printWinner();
        sortPlayersByTheirScore();
-
-
 
     }
 
@@ -258,14 +275,14 @@ public class Game {
 //        }
 //        return null;
 //    }
-    public Card chooseCard(Player player){
-        if(player instanceof Bot){
-            return botChoosesCard((Bot) player);
-        }
-        else{
-            return player.chooseFromHand(validSign , validColorName);
-        }
-    }
+//    public Card chooseCard(Player player){
+//        if(player instanceof Bot){
+//            return botChoosesCard((Bot) player);
+//        }
+//        else{
+//            return player.chooseFromHand(validSign , validColorName);
+//        }
+//    }
     public Card botChoosesCard(Bot bot){
         Card botChoice = bot.chooseFromHand(validSign , validColorName);
         if(botChoice == null){
@@ -293,6 +310,7 @@ public class Game {
         gameParameters.setPunishNext(0);
         gameParameters.setNextColor("");
         gameParameters.setJump(false);
+        gameParameters.setChooseColorName(false);
     }
 
     public void punishSomeOneForCard2(Player pusher){
@@ -304,16 +322,28 @@ public class Game {
     }
 
     public void punishPlayerForCard7(int howManyCards){
+            ArrayList<Card> addingCards ;
+            System.out.println( currentPlayer.getName() +" is punished because of card 7 takes " + howManyCards + " from the card deck");
 
-            System.out.println("you are punished because of card 7 and you take " + howManyCards + " from the card deck");
-            addCardsToPlayerHandFromCardDeck(howManyCards);
+            addingCards=addCardsToPlayerHandFromCardDeck(howManyCards);
+            System.out.println("adding cards are : ");
+            for(Card card : addingCards){
+                System.out.print(" " + card.toString()+ " ");
+            }
+            System.out.println();
+            System.out.println();
 
     }
 
-    public void addCardsToPlayerHandFromCardDeck(int howMany){
+    public ArrayList<Card> addCardsToPlayerHandFromCardDeck(int howMany){
+        ArrayList<Card> addingCards = new ArrayList<>();
+        Card addingCard;
         for(int i = 1; i <= howMany; i++){
-            currentPlayer.takeACard(cardDeck.giveOneCard());
+            addingCard = cardDeck.giveOneCard();
+            currentPlayer.takeACard(addingCard);
+            addingCards.add(addingCard);
         }
+        return addingCards;
     }
 
     public void resetGameParametersButPunishNext(){
@@ -350,5 +380,19 @@ public class Game {
                 }
             }
         }
+    }
+
+    public void delay() throws InterruptedException {
+        Thread.sleep(3500);
+    }
+
+    public void printDirection(){
+        if(gameParameters.getStep() == 1){
+            System.out.println("Direction : Clockwise");
+        }
+        else {
+            System.out.println("Direction : Anticlockwise");
+        }
+        System.out.println();
     }
 }

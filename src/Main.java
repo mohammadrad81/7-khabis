@@ -11,7 +11,7 @@ public class Main {
         mainMenu();
     }
 
-    public static void mainMenu(){
+    public static void mainMenu() throws InterruptedException {
 
 
         int input = 0;
@@ -41,7 +41,7 @@ public class Main {
         System.out.println("try again : ");
     }
 
-    public static void playWithBots(){
+    public static void playWithBots() throws InterruptedException {
         int botCount;
         int humanCount;
         System.out.println("Enter the number of bots (less than 5) (Enter -1 back to menu) : ");
@@ -53,19 +53,21 @@ public class Main {
         else if(botCount <1 || botCount >= 5){
             printNotValidInput();
             playWithBots();
+            return;
         }
 
         else {
-            System.out.println("Enter the number of players (less than " + (5 - botCount + 1) +")" + "(Enter -1 back to menu )" );
+            System.out.println("Enter the number of players (less than " + (6 - botCount ) +")" + "(Enter -1 back to menu )" );
             humanCount  = scanner.nextInt();
             scanner.nextLine();
             if(humanCount == -1){
                 return;
             }
 
-            else if(humanCount <= 0 || humanCount+botCount > 5){
+            else if(humanCount <= 0 || humanCount+botCount > 5 ){
                 printNotValidInput();
                 playWithBots();
+                return;
             }
             else {
 
@@ -81,7 +83,7 @@ public class Main {
         }
     }
 
-    public static void playTogether(){
+    public static void playTogether() throws InterruptedException {
         int humanCount;
         System.out.println("Enter the count of the players (Enter -1 to back to menu) :");
         humanCount = scanner.nextInt();
