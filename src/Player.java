@@ -90,10 +90,10 @@ public class Player {
             int chosenPlayerIndex;
             System.out.println("choose a player to punish : ");
             for(int i = 0; i < allPlayersButThis.size(); i++){
-                System.out.println((i+1) + allPlayersButThis.get(i).name);
+                System.out.println((i+1) + "- " +  allPlayersButThis.get(i).name);
             }
             chosenPlayerIndex = scanner.nextInt();
-            scanner.nextLine();
+//            scanner.nextLine();
             if(chosenPlayerIndex <=0 || chosenPlayerIndex > allPlayersButThis.size()){
                 System.out.println("Not valid input!");
                 System.out.println("please try again :");
@@ -115,15 +115,18 @@ public class Player {
             Card chosenCard = null;
             int cardIndex;
             do{
-                System.out.println("which cart ? (-1 to pick up a card from cardDeck) ?");
+                System.out.println("which cart ? (-1 to pick up card from cardDeck) ?");
                  cardIndex =scanner.nextInt();
-                 scanner.nextLine();
+//                 scanner.nextLine();
                  if(cardIndex == -1){
                      return null;
                  }
                  else if(cardIndex<=0 ||cardIndex > hand.size()){
                      System.out.println("not valid input");
                      System.out.println("please try again : ");
+                 }
+                 else if(hand.get(cardIndex-1).getSign().equals("B")){
+                     chosenCard = hand.get(cardIndex -1);
                  }
                  else if((!(hand.get(cardIndex-1).getSign().equals(sign))) &&
                          (!(hand.get(cardIndex-1).getColorName().equals(colorName)))){
@@ -140,40 +143,61 @@ public class Player {
             hand.remove(chosenCard);
             return chosenCard;
     }
-    public Card playAnyOfAColor(String colorName){
-
+//    public Card playAnyOfAColor(String colorName){
+//
+//        Scanner scanner = new Scanner(System.in);
+//        Card chosenCard = null;
+//        int chosenCardIndex;
+//
+//        if(! hasCardsOfTheColor(colorName)){
+//            return null;
+//        }
+//
+//        do{
+//            System.out.println("play a card of color : "+ colorName );
+//            System.out.println("which card ? :");
+//            chosenCardIndex = scanner.nextInt();
+//            scanner.nextLine();
+//            if(chosenCardIndex > hand.size() || chosenCardIndex <= 0){
+//                System.out.println("not valid input");
+//                System.out.println("please try again ");
+//            }
+//            else if(!(hand.get(chosenCardIndex-1).getColorName().equals(colorName))){
+//                System.out.println("this card is not a card of color " + colorName);
+//            }
+//        }while (!(hand.get(chosenCardIndex-1).getColorName().equals(colorName)));
+//
+//        chosenCard = hand.get(chosenCardIndex-1);
+//        return chosenCard;
+//
+//    }
+    public Card play7(){
         Scanner scanner = new Scanner(System.in);
         Card chosenCard = null;
-        int chosenCardIndex;
-
-        if(! hasCardsOfTheColor(colorName)){
-            return null;
-        }
-
+        int cardIndex;
         do{
-            System.out.println("play a card of color : "+ colorName );
-            System.out.println("which card ? :");
-            chosenCardIndex = scanner.nextInt();
-            scanner.nextLine();
-            if(chosenCardIndex > hand.size() || chosenCardIndex <= 0){
+            System.out.println("which card ? (it should be 7 )");
+            cardIndex = scanner.nextInt();
+//            scanner.nextLine();
+            if(cardIndex<=0 || cardIndex > hand.size()){
                 System.out.println("not valid input");
-                System.out.println("please try again ");
+                System.out.println("please try again : ");
             }
-            else if(!(hand.get(chosenCardIndex-1).getColorName().equals(colorName))){
-                System.out.println("this card is not a card of color " + colorName);
+            else if((!(hand.get(cardIndex-1).getSign().equals("7")))){
+                System.out.println("! it is not a seven card !");
+                System.out.println("please try again : ");
             }
-        }while (!(hand.get(chosenCardIndex-1).getColorName().equals(colorName)));
+            else{
+                chosenCard = hand.get(cardIndex - 1);
+            }
 
-        chosenCard = hand.get(chosenCardIndex-1);
+        }while(cardIndex <= 0 || cardIndex > hand.size() || chosenCard == null);
+
+
+        hand.remove(chosenCard);
         return chosenCard;
 
-    }
-    public Card play7(){
-            Card sevenCard = chooseFromHand("7" , "only 7 is valid");
-            if(! (sevenCard instanceof Seven)){
-                return null;
-            }
-            return sevenCard;
+
     }
 
     public boolean hasCardsOfTheColor(String colorName){
@@ -195,7 +219,7 @@ public class Player {
         System.out.println("3-green");
         System.out.println("4-blue");
         nextColorIndex = scanner.nextInt();
-        scanner.nextLine();
+//        scanner.nextLine();
         if (nextColorIndex > 4 || nextColorIndex < 1) {
             System.out.println("not valid input");
            return chooseColorName();
@@ -216,7 +240,9 @@ public class Player {
         }
 
     }
-
-
+    @Override
+    public String toString(){
+            return (this.name + " " + this.score);
+    }
 
 }
