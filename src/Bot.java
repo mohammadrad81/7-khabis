@@ -14,7 +14,7 @@ public class Bot extends Player{
                 hand.get(i).getSign().equals(sign)){
                 Card card = hand.get(i);
                 hand.remove(card);
-                System.out.println("bot played " + card.toString());
+//                System.out.println("bot played " + card.toString());
                 return card;
             }
 

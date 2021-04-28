@@ -119,7 +119,17 @@ public class Player {
                  cardIndex =scanner.nextInt();
 //                 scanner.nextLine();
                  if(cardIndex == -1){
-                     return null;
+                     ArrayList<Card> playableCards = playableNormalCards(sign , colorName);
+                     if(playableCards.size() == 0){
+                         return null;
+                     }
+                     else {
+                         System.out.println("you still can play : ");
+                         for(Card card : playableCards){
+                             System.out.print(card + " ");
+                         }
+                         System.out.println();
+                     }
                  }
                  else if(cardIndex<=0 ||cardIndex > hand.size()){
                      System.out.println("not valid input");
@@ -239,6 +249,17 @@ public class Player {
 
         }
 
+    }
+    public ArrayList<Card> playableNormalCards(String sign , String colorName){
+            ArrayList<Card> playableNormalCardArrayList= new ArrayList<>();
+            for(Card card : hand){
+                if(card.getSign().equals(sign) ||
+                    card.getColorName().equals(colorName) ||
+                        (card instanceof B)){
+                    playableNormalCardArrayList.add(card);
+                }
+            }
+            return playableNormalCardArrayList;
     }
     @Override
     public String toString(){

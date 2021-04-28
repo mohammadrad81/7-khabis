@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -60,6 +61,9 @@ public class Game {
     }
 
     public void gameBegins() throws InterruptedException {
+
+        printPlayersInClockwiseDirection();
+
         boolean mustPlay7 = false;
         Card playingCard = null;
         giveEachPlayer7Cards(players);
@@ -75,6 +79,7 @@ public class Game {
                currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
                resetGameParameters();
                delay();
+               System.out.println();
                continue;
            }
 
@@ -82,6 +87,7 @@ public class Game {
                currentPlayer = nextPlayer(currentPlayer , (-1) * gameParameters.getStep());
                resetGameParameters();
                delay();
+               System.out.println();
                continue;
            }
 
@@ -92,6 +98,7 @@ public class Game {
                resetGameParameters();
                currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
                delay();
+               System.out.println();
                continue;
            }
            if(gameParameters.isChooseColor()){
@@ -101,6 +108,8 @@ public class Game {
                currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
                resetGameParameters();
                delay();
+
+               System.out.println();
                continue;
            }
 
@@ -122,8 +131,14 @@ public class Game {
                     if(! currentPlayer.has7()){
                         currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
                         resetGameParameters();
+                        mustPlay7 = false;
                         delay();
+                        System.out.println();
                         continue;
+                    }
+                    else {
+
+                      mustPlay7 = true;
                     }
                 }
            }
@@ -133,45 +148,23 @@ public class Game {
            if(mustPlay7){
                System.out.println("!! player must play card 7 !! ");
                 playingCard = currentPlayer.play7();
-                resetGameParameters();
+                resetGameParametersButPunishNext();
            }
 
            else{
                 playingCard = currentPlayer.chooseFromHand(validSign , validColorName);
            }
 
-//           if(!(gameParameters.getNextColor().equals(""))){
-//
-//               if(currentPlayer.hasCardsOfTheColor(gameParameters.getNextColor())){
-//                   currentPlayer.playAnyOfAColor(gameParameters.getNextColor());
-//               }
-//
-//               else{
-//                   Card addingCard = cardDeck.giveOneCard();
-//                   System.out.println(currentPlayer.getName() + " took a card from card deck");
-//                   currentPlayer.takeACard(addingCard);
-//                   System.out.println("now hand of " + currentPlayer.getName() + "is : ");
-//                   currentPlayer.printHand();
-//                   if(addingCard.getColorName().equals(gameParameters.getNextColor())){
-//                       System.out.println(currentPlayer.getName() + " took a playable card" + addingCard.toString() + "and played it");
-//                       playingCard = addingCard;
-//                       currentPlayer.getHand().remove(addingCard);
-//                       cardDeck.addCardsToDeck(addingCard);
-//                   }
-//                   else {
-//                       System.out.println( currentPlayer.getName() + " can not play the taken card");
-//                   }
-//               }
-//           }
 
            if(playingCard == null){
                System.out.println(currentPlayer.getName() + " picks a card from card deck");
                Card addingCard = cardDeck.giveOneCard();
                currentPlayer.takeACard(addingCard);
                currentPlayer.printHand();
-               System.out.println(currentPlayer.getName() + " took a playable card" + addingCard.toString());
+               System.out.println(currentPlayer.getName() + " took a card" + addingCard.toString());
                if(isCardPlayable(validSign , validColorName , addingCard)){
                    System.out.print(" and played it ");
+                   System.out.println();
                    playingCard = addingCard;
                    cardDeck.addCardsToDeck(addingCard);
                    currentPlayer.getHand().remove(addingCard);
@@ -208,7 +201,9 @@ public class Game {
        }while (getWinnerIndex() == -1);
 
        printWinner();
-       sortPlayersByTheirScore();
+       players = sortPlayersByScore(players);
+       printLosersNamesAndScores();
+
 
     }
 
@@ -320,6 +315,7 @@ public class Game {
         Card punishingCard = pusher.getHand().get(random.nextInt(pusher.getHand().size()));
         pusher.getHand().remove(punishingCard);
         punishingPlayer.getHand().add(punishingCard);
+        System.out.println("the pushed card is : " + punishingCard.toString());
     }
 
     public void punishPlayerForCard7(int howManyCards){
@@ -355,33 +351,44 @@ public class Game {
     }
 
     public void printWinner(){
-        System.out.println("!!! THE " + players.get(getWinnerIndex()).getName()+ "IS THE WINNER !!!");
+        System.out.println("!!! THE " + players.get(getWinnerIndex()).getName()+ " IS THE WINNER !!!");
 
     }
 
     public void printLosersNamesAndScores(){
-        for(int i = 1; i <= players.size() ;){
-            if(i-1 != getWinnerIndex()){
-                System.out.println( i + "- " + players.get(i-1) + "WITH SCORE : " + players.get(i-1).getScore());
-                i++;
+       int counter = 1;
+        for(Player player : players){
+            if(players.indexOf(player) != getWinnerIndex()){
+                System.out.println(counter + "- "+ player.toString());
+                counter++;
             }
         }
         System.out.println();
     }
+    public ArrayList<Player> sortPlayersByScore(ArrayList<Player> players){
+        ArrayList<Player> sortedPlayers= new ArrayList<>();
+        int minScore = 1000000;
+        Player minScorePlayer;
+        Player player = new Player("no one nobody");
 
-    public void sortPlayersByTheirScore(){
-        ArrayList<Player> sortedPlayers = new ArrayList<>();
-        Player temp;
-        for(int i = 0; i < players.size() ; i++){
-            for(int j = i; j < players.size() ; j++){
-                if(players.get(j).getScore() > players.get(i).getScore()){
-                    temp = players.get(i);
-                    players.add(i , players.get(j));
-                    players.add(j , temp);
+        while (players.size() > 0){
+            Iterator<Player> it = players.iterator();
+            while ((it.hasNext())){
+                player = it.next();
+                if(player.getScore() < minScore){
+                    minScore = player.getScore();
+                    minScorePlayer = player;
                 }
             }
+            minScore = 100000;
+            sortedPlayers.add(player);
+            players.remove(player);
         }
+
+        return sortedPlayers;
     }
+
+
 
     public void delay() throws InterruptedException {
         Thread.sleep(3500);
@@ -393,6 +400,14 @@ public class Game {
         }
         else {
             System.out.println("Direction : Anticlockwise");
+        }
+        System.out.println();
+    }
+
+    public void printPlayersInClockwiseDirection(){
+        System.out.println("players in clockwise direction are :");
+        for(Player player : players){
+            System.out.println(player.getName());
         }
         System.out.println();
     }
