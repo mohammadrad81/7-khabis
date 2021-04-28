@@ -50,7 +50,7 @@ public class Main {
         if(botCount == -1) {
             return;
         }
-        else if(botCount <1 || botCount >= 5){
+        else if(botCount < 1 || botCount >= 5){
             printNotValidInput();
             playWithBots();
             return;
@@ -66,6 +66,10 @@ public class Main {
 
             else if(humanCount <= 0 || humanCount+botCount > 5 ){
                 printNotValidInput();
+                playWithBots();
+                return;
+            }else if(humanCount + botCount <3){
+                System.out.println("there should be at least 3 players");
                 playWithBots();
                 return;
             }
@@ -85,17 +89,18 @@ public class Main {
 
     public static void playTogether() throws InterruptedException {
         int humanCount;
-        System.out.println("Enter the count of the players (Enter -1 to back to menu) :");
+        System.out.println("Enter the count of the players (at least 3 and most 5) (Enter -1 to back to menu) :");
         humanCount = scanner.nextInt();
         scanner.nextLine();
         if(humanCount == -1){
             return;
         }
-        else if(humanCount <= 0 || humanCount >5){
+        else if(humanCount < 3 || humanCount >5){
             printNotValidInput();
             playTogether();
             return;
         }
+
         Game game = new Game(0 , humanCount , humanPlayerArrayList(setHumansNames(humanCount)));
         game.gameBegins();
         return;
