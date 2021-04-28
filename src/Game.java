@@ -165,11 +165,11 @@ public class Game {
 //           }
 
            if(playingCard == null){
-               System.out.println("player picks a card from card deck");
+               System.out.println(currentPlayer.getName() + " picks a card from card deck");
                Card addingCard = cardDeck.giveOneCard();
                currentPlayer.takeACard(addingCard);
                currentPlayer.printHand();
-               System.out.println("player took a playable card" + addingCard.toString());
+               System.out.println(currentPlayer.getName() + " took a playable card" + addingCard.toString());
                if(isCardPlayable(validSign , validColorName , addingCard)){
                    System.out.print(" and played it ");
                    playingCard = addingCard;
@@ -194,6 +194,7 @@ public class Game {
 
             if(playingCard != null){
                 lastCard = playingCard;
+                System.out.println(currentPlayer.getName() + " played " + lastCard.toString());
             }
 
            currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
@@ -295,7 +296,7 @@ public class Game {
     }
 
     public boolean isCardPlayable(String sign , String colorNames, Card playingCard){
-        if(playingCard.getColor().equals(colorNames) ||
+        if(playingCard.getColorName().equals(colorNames) ||
             playingCard.getSign().equals(sign)){
             return true;
         }
