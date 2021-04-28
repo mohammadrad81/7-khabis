@@ -183,7 +183,7 @@ public class Game {
                resetGameParameters();
            }
             cardDeck.addCardsToDeck(lastCard);
-            cardDeck.shuffleCards();
+
 
             if(playingCard != null){
                 lastCard = playingCard;
@@ -335,7 +335,7 @@ public class Game {
     public ArrayList<Card> addCardsToPlayerHandFromCardDeck(int howMany){
         ArrayList<Card> addingCards = new ArrayList<>();
         Card addingCard;
-        for(int i = 1; i <= howMany; i++){
+        for(int i = 1; (i <= howMany) && (cardDeck.isDeckEmpty()==false); i++){
             addingCard = cardDeck.giveOneCard();
             currentPlayer.takeACard(addingCard);
             addingCards.add(addingCard);
