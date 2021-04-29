@@ -56,6 +56,8 @@ public class CardDeck {
         B greenB = new B("B" , ColorNames.GREEN_NAME);
         B blueB = new B("B" , ColorNames.BLUE_NAME);
 
+        addNormalCardWithSignWithAllColors("C");
+        addNormalCardWithSignWithAllColors("D");
 
         addCardsToDeck(blackSeven , redSeven , greenSeven , blueSeven ,
                         blackTwo , redTwo , greenTwo , blueTwo ,
