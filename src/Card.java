@@ -1,4 +1,11 @@
-
+/**
+ * the definition of the cards of the game ( basically normal cards)
+ * @author Mohammad Heydari Rad
+ * @since 2021
+ * @see Game
+ * @see ColorNames
+ * @see  ConsoleColors
+ */
 public class Card {
     private String sign;
     private String colorName;
@@ -14,6 +21,11 @@ public class Card {
         this.score = signToScore(sign);
     }
 
+    /**
+     *
+     * @param sign is the sign of the card
+     * @return the score of the card
+     */
     private int signToScore(String sign){
         if(sign.equals("3")){
             return 3;
@@ -62,7 +74,13 @@ public class Card {
         return 0;//never happens
     }
 
-
+    /**
+     * to print the cards in rows
+     * we should be able to print a row of the card
+     * this method prints left half of the row
+     * @param rowNumber is the number of the wanted row of the card
+     * @return a string that is half of the wanted row
+     */
     public String halfRowString(int rowNumber){
         String row = color;
         if(rowNumber == 1){
@@ -85,6 +103,14 @@ public class Card {
         row += ConsoleColors.WHITE + " ";
         return row;
     }
+
+    /**
+     * to print the cards in rows
+     * we should be able to print a row of the card
+     * this method prints a complete row
+     * @param rowNumber is the number of the wanted row of the card
+     * @return a string that is half of the wanted row
+     */
     public String fullRowString(int rowNumber){
         String row = color;
         if(rowNumber == 1){
@@ -116,20 +142,42 @@ public class Card {
         return row;
     }
 
+    /**
+     * card sign getter method
+     * @return  sign of the card
+     */
     public String getSign() {
         return sign;
     }
+
+    /**
+     * color name getter method
+     * @return the color name of the card ( color name is the name of the color , not its ansi code)
+     */
     public String getColorName(){
         return colorName;
     }
+
+    /**
+     * color getter method
+     * @return the ansi code of the color of the card
+     */
     public String getColor() {
         return color;
     }
 
+    /**
+     * score getter method
+     * @return the score of the card
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     *
+     * @return the sign and the color name of the card in a string
+     */
     @Override
     public String toString(){
         return (" " + sign + " " + colorName);

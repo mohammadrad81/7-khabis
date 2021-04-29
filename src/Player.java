@@ -1,6 +1,12 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * class of the dirty 7  game players
+ * @author Mohammad Heydari Rad
+ * @since 2021
+ * @see Card
+ */
 public class Player {
         private String name;
         private int score;
@@ -11,22 +17,44 @@ public class Player {
             score = 0;
             hand = new ArrayList<>();
         }
+
+    /**
+     * player takes a card
+     * @param card taking card
+     */
     public void takeACard(Card card){
             hand.add(card);
     }
+
+    /**
+     *
+     * @return the name of the player
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * sets the player name
+     * @param name is the players name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     *
+     * @return the score of the player
+     */
     public int getScore() {
             score = calculateScore();
             return score;
     }
 
+    /**
+     * calculates the score of the players hand
+     * @return
+     */
     private int calculateScore(){
             int score = 0;
             for(Card card : hand){
@@ -35,18 +63,34 @@ public class Player {
             return score;
     }
 
+    /**
+     * sets the score of the player
+     * @param score is the input score
+     */
     public void setScore(int score) {
         this.score = score;
     }
 
+    /**
+     *
+     * @return the hand of the player
+     */
     public ArrayList<Card> getHand() {
         return hand;
     }
 
+    /**
+     * sets the hand of the player
+     * @param hand
+     */
     public void setHand(ArrayList<Card> hand) {
         this.hand = hand;
     }
 
+    /**
+     *
+     * @return true if the player has no cards , else false
+     */
     public boolean isWinner(){
             if(hand.size() == 0){
                 return true;
@@ -54,6 +98,9 @@ public class Player {
             return false;
     }
 
+    /**
+     * prints the hand of the player
+     */
     public void printHand(){
         System.out.println();
             for(int i = 1 ; i <= 6; i++){
@@ -79,6 +126,11 @@ public class Player {
         System.out.println();
     }
 
+    /**
+     * player chooses to punish some one for card 2
+     * @param players other players
+     * @return the chosen player
+     */
     public Player chooseToPunish(ArrayList<Player> players){
             Scanner scanner = new Scanner(System.in);
             ArrayList<Player> allPlayersButThis = new ArrayList<>();
@@ -101,6 +153,11 @@ public class Player {
             }
             return allPlayersButThis.get(chosenPlayerIndex - 1);
     }
+
+    /**
+     *
+     * @return true if player has card 7 , else false
+     */
     public boolean has7(){
             for(Card card : hand){
                 if(card instanceof Seven){
@@ -110,6 +167,12 @@ public class Player {
             return false;
     }
 
+    /**
+     * player chooses a playable card on a normal card
+     * @param sign is the valid sign to play on
+     * @param colorName is the valid color name to play on
+     * @return
+     */
     public Card  chooseFromHand(String sign ,  String colorName){
             Scanner scanner = new Scanner(System.in);
             Card chosenCard = null;
@@ -153,34 +216,11 @@ public class Player {
             hand.remove(chosenCard);
             return chosenCard;
     }
-//    public Card playAnyOfAColor(String colorName){
-//
-//        Scanner scanner = new Scanner(System.in);
-//        Card chosenCard = null;
-//        int chosenCardIndex;
-//
-//        if(! hasCardsOfTheColor(colorName)){
-//            return null;
-//        }
-//
-//        do{
-//            System.out.println("play a card of color : "+ colorName );
-//            System.out.println("which card ? :");
-//            chosenCardIndex = scanner.nextInt();
-//            scanner.nextLine();
-//            if(chosenCardIndex > hand.size() || chosenCardIndex <= 0){
-//                System.out.println("not valid input");
-//                System.out.println("please try again ");
-//            }
-//            else if(!(hand.get(chosenCardIndex-1).getColorName().equals(colorName))){
-//                System.out.println("this card is not a card of color " + colorName);
-//            }
-//        }while (!(hand.get(chosenCardIndex-1).getColorName().equals(colorName)));
-//
-//        chosenCard = hand.get(chosenCardIndex-1);
-//        return chosenCard;
-//
-//    }
+
+    /**
+     * if player has 7 and has to play 7
+     * @return the card 7 the player has
+     */
     public Card play7(){
         Scanner scanner = new Scanner(System.in);
         Card chosenCard = null;
@@ -210,16 +250,10 @@ public class Player {
 
     }
 
-    public boolean hasCardsOfTheColor(String colorName){
-            for(Card card : hand){
-                if (card.getColorName().equals(colorName)){
-                    return true;
-                }
-
-            }
-            return false;
-    }
-
+    /**
+     * player changes the valid color of the game
+     * @return the chosen color name
+     */
     public String chooseColorName(){
         Scanner scanner = new Scanner(System.in);
         int nextColorIndex;
@@ -250,6 +284,13 @@ public class Player {
         }
 
     }
+
+    /**
+     * shows the playable cards
+     * @param sign is the valid sign to play
+     * @param colorName the valid color name to play
+     * @return the array list of playable cards
+     */
     public ArrayList<Card> playableNormalCards(String sign , String colorName){
             ArrayList<Card> playableNormalCardArrayList= new ArrayList<>();
             for(Card card : hand){
@@ -261,6 +302,11 @@ public class Player {
             }
             return playableNormalCardArrayList;
     }
+
+    /**
+     * returns the name and score of the player in a string
+     * @return
+     */
     @Override
     public String toString(){
             return (this.name + " " + this.score);

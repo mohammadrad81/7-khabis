@@ -1,6 +1,15 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * a definition of the card deck of the dirty 7 game
+ * @author Mohammad Heydari rad
+ * @since 2021
+ * @see Card
+ * @see ConsoleColors
+ * @see ColorNames
+ *
+ */
 public class CardDeck {
     private ArrayList<Card> deck;
 
@@ -9,11 +18,20 @@ public class CardDeck {
         initialDeck();
         shuffleCards();
     }
+
+    /**
+     * adds the input cards to the card deck
+     * @param cards
+     */
     public void addCardsToDeck(Card... cards){
         for(Card card : cards){
             deck.add(card);
         }
     }
+
+    /**
+     * adds the playing cards to the deck
+     */
     private void initialDeck(){
         String sign;
 
@@ -69,6 +87,11 @@ public class CardDeck {
 
     }
 
+    /**
+     * adds normal cards of the game to the card deck
+     * by all colors
+     * @param sign is the sign of the wanted card
+     */
     private void addNormalCardWithSignWithAllColors(String sign ){
         ArrayList<Card> cards = new ArrayList<>();
 
@@ -84,7 +107,9 @@ public class CardDeck {
 
     }
 
-
+    /**
+     * shuffles the cards
+     */
     public void shuffleCards(){
         ArrayList<Card> shufflingCards = deck;
         deck = new ArrayList<>();
@@ -96,14 +121,24 @@ public class CardDeck {
             shufflingCards.remove(index);
         }
     }
+
+    /**
+     * gives a card from the start of the deck
+     * @return the card
+     */
     public Card giveOneCard(){
         if(deck.size() > 0){
             Card givingCard =  deck.get(0);
             deck.remove(0);
             return givingCard;
         }
-        return null;
+        return null; // never happens
     }
+
+    /**
+     * checks that the card deck is empty or not
+     * @return
+     */
     public boolean isDeckEmpty(){
         if (deck.size() == 0){
             return true;

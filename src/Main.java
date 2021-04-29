@@ -2,15 +2,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Main Class for the dirty 7 game
+ * @author Mohammad Heydari rad
+ * @since 2021
+ * @see Game
+ * @see Card
+ */
 public class Main {
     public static Scanner scanner = new Scanner(System.in);
 
     public static void main(String args[]) throws IOException, InterruptedException {
         int processBuilder = new ProcessBuilder("cmd" , "/c" , "color" , "00").inheritIO().start().waitFor();
+        // i don't know how but it fixes the problem of colors in cmd
         System.out.println(ConsoleColors.CYAN + "!!! WELCOME TO RAD EVIL 7 GAME !!!" + ConsoleColors.RESET);
         mainMenu();
     }
 
+    /**
+     * the main menu of the game
+     * @throws InterruptedException idk what it is
+     */
     public static void mainMenu() throws InterruptedException {
 
 
@@ -36,11 +48,18 @@ public class Main {
         }
     }
 
+    /**
+     * prints that the input is not valid
+     */
     public static void printNotValidInput(){
         System.out.println("Not valid input !");
         System.out.println("try again : ");
     }
 
+    /**
+     * playing with bots
+     * @throws InterruptedException idk
+     */
     public static void playWithBots() throws InterruptedException {
         int botCount;
         int humanCount;
@@ -87,6 +106,10 @@ public class Main {
         }
     }
 
+    /**
+     * playing all real players
+     * @throws InterruptedException idk
+     */
     public static void playTogether() throws InterruptedException {
         int humanCount;
         System.out.println("Enter the count of the players (at least 3 and most 5) (Enter -1 to back to menu) :");
@@ -106,6 +129,11 @@ public class Main {
         return;
     }
 
+    /**
+     * sets the humans names return an arrayList of the names
+     * @param count the count of the human players
+     * @return  an arrayList of the names
+     */
     public static ArrayList<String> setHumansNames(int count){
         ArrayList<String> names = new ArrayList<>();
         String name;
@@ -117,6 +145,11 @@ public class Main {
         return names;
     }
 
+    /**
+     * sets the name of the bots names
+     * @param count the bots count
+     * @return the arrayList of the bots' names
+     */
     public static ArrayList<String> setBotsNames(int count){
         ArrayList<String> botsNames = new ArrayList<>();
         String name;
@@ -127,6 +160,12 @@ public class Main {
         return botsNames;
     }
 
+    /**
+     * merges Two arrayList of the players
+     * @param list1
+     * @param list2
+     * @return the merged arrayList
+     */
     public static ArrayList<Player> mergeTwoPlayersArrayLists(ArrayList<Player> list1 , ArrayList<Player> list2){
         ArrayList<Player> mergedList = new ArrayList<>();
         for(int i = 0; i<list1.size(); i++){
@@ -138,6 +177,11 @@ public class Main {
         return mergedList;
     }
 
+    /**
+     * creates an arrayList of human players by their nameds
+     * @param humansNames is the list of players names
+     * @return the player arrayList
+     */
     public static ArrayList<Player> humanPlayerArrayList(ArrayList<String> humansNames){
         ArrayList<Player> humans = new ArrayList<>();
         for(String humanName : humansNames){
@@ -146,6 +190,11 @@ public class Main {
         return humans;
     }
 
+    /**
+     * creates an arrayList of bots players by their names
+     * @param botsNames is the list of bots names
+     * @return the arrayList of bots
+     */
     public static ArrayList<Player> botsPlayerArrayList(ArrayList<String> botsNames) {
         ArrayList<Player> bots = new ArrayList<>();
         for(String botName : botsNames){

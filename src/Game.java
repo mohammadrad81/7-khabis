@@ -3,6 +3,15 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * the game class
+ * @author Mohammad Heydari Rad
+ * @since 2021
+ * @see GameParameters
+ * @see Card
+ * @see ColorNames
+ * @see ConsoleColors
+ */
 public class Game {
     private ArrayList<Player> players;
     private GameParameters gameParameters;
@@ -16,19 +25,12 @@ public class Game {
     private String validSign = null;
 
 
-//    public Game(int bots , int humans , ArrayList<String> playersNames){
-//        players = new ArrayList<>();
-//        gameParameters = new GameParameters();
-//        cardDeck = new CardDeck();
-//
-//        for(String playerName : playersNames){
-//            players.add(new Player( playerName));
-//        }
-//
-//        players = initialPlayers(players);
-//
-//    }
-
+    /**
+     * the game with inputs conditions
+     * @param bots is the count of bots
+     * @param humans is the count of humans ( real players)
+     * @param players is the players
+     */
     public Game(int bots , int humans , ArrayList<Player> players){
         this.players = new ArrayList<>();
         this.gameParameters = new GameParameters();
@@ -40,6 +42,12 @@ public class Game {
         this.players = initialPlayers(this.players);
     }
 
+    /**
+     * it initials the players to be designed randomly
+     * and the first player should be a human
+     * @param players
+     * @return
+     */
     private ArrayList<Player> initialPlayers(ArrayList<Player> players){
         ArrayList<Player> initializedPlayers = new ArrayList<>();
         while (players.size() > 0){
@@ -59,7 +67,10 @@ public class Game {
 
         return initializedPlayers;
     }
-
+    /**
+    * the game and it's logics
+     * it is too long and every one that knows the game understands the code , else , i doubt
+     */
     public void gameBegins() throws InterruptedException {
 
         printPlayersInClockwiseDirection();
@@ -134,18 +145,7 @@ public class Game {
                     delay();
                     System.out.println();
                     continue;
-//                    if(! currentPlayer.has7()){
-//                        currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
-//                        resetGameParameters();
-//                        mustPlay7 = false;
-//                        delay();
-//                        System.out.println();
-//                        continue;
-//                    }
-//                    else {
-//
-//                      mustPlay7 = true;
-//                    }
+
                 }
            }
 
@@ -213,6 +213,10 @@ public class Game {
 
     }
 
+    /**
+     * at the start of the game , each player has 7 cards
+     * @param players
+     */
     public void giveEachPlayer7Cards (ArrayList<Player> players){
         for(Player player : players){
             for(int i = 1; i <= 7; i++){
@@ -221,6 +225,9 @@ public class Game {
         }
     }
 
+    /**
+     * initials the first card , it should not be an actionable card
+     */
     public void initialFirstCard(){
         Card card ;
 
@@ -230,6 +237,11 @@ public class Game {
 
         lastCard = card;
     }
+
+    /**
+     * the index of the player that has no card in his/her/its hand
+     * @return  the index , else -1
+     */
     public int getWinnerIndex(){
         for(int i = 0; i < players.size(); i++){
             if(players.get(i).isWinner()){
@@ -239,6 +251,10 @@ public class Game {
 
         return -1;
     }
+
+    /**
+     * prints the last card , ( in the start of the game , first card)
+     */
     public void printLastCard(){
 
         System.out.println("Top card : ");
@@ -248,12 +264,24 @@ public class Game {
         System.out.println();
     }
 
+    /**
+     * returns the next player of the current player , by the step
+     * @param currentPlayer
+     * @param step
+     * @return the next player
+     */
     public Player nextPlayer(Player currentPlayer , int step){
        int currentIndex = players.indexOf(currentPlayer);
        int nextPlayerIndex = mod(currentIndex + step , players.size());
        return players.get(nextPlayerIndex);
     }
 
+    /**
+     * modular operator in mathematics
+     * @param a
+     * @param b
+     * @return a mod b
+     */
     public int mod(int a , int b){
         while (a < 0){
             a += b;
@@ -264,41 +292,19 @@ public class Game {
         return a;
     }
 
-//    public Card playerChoosesCard(Player currentPlayer) {
-//        currentPlayer.printHand();
-//        if(currentPlayer instanceof Bot){
-//            Bot bot = (Bot) currentPlayer;
-//            botChoosesCard(bot);
-//
-//        }
-//        else{
-//            System.out.println("Enter the index of the card to play");
-//
-//        }
-//        return null;
-//    }
-//    public Card chooseCard(Player player){
-//        if(player instanceof Bot){
-//            return botChoosesCard((Bot) player);
-//        }
-//        else{
-//            return player.chooseFromHand(validSign , validColorName);
-//        }
-//    }
-    public Card botChoosesCard(Bot bot){
-        Card botChoice = bot.chooseFromHand(validSign , validColorName);
-        if(botChoice == null){
-            System.out.println(bot.getName()+ " could not play any card so he picked one up from card deck");
-            bot.getHand().add(cardDeck.giveOneCard());
 
-            return null;
-        }
-        return botChoice;
-    }
+    /**
+     * if the
+     * @param sign
+     * @param colorNames
+     * @param playingCard
+     * @return
+     */
 
     public boolean isCardPlayable(String sign , String colorNames, Card playingCard){
         if(playingCard.getColorName().equals(colorNames) ||
-            playingCard.getSign().equals(sign)){
+            playingCard.getSign().equals(sign) ||
+            playingCard.getSign().equals("B")){
             return true;
         }
         else {
@@ -306,6 +312,9 @@ public class Game {
         }
     }
 
+    /**
+     * resets the parameters of the game
+     */
     public void resetGameParameters(){
         gameParameters.setChooseToPunish(false);
         gameParameters.setPrize(false);
@@ -315,6 +324,10 @@ public class Game {
         gameParameters.setChooseColorName(false);
     }
 
+    /**
+     * pusher gives a random card to the chosen player / bot
+     * @param pusher
+     */
     public void punishSomeOneForCard2(Player pusher){
         Player punishingPlayer;
         punishingPlayer = pusher.chooseToPunish(players);
@@ -324,6 +337,10 @@ public class Game {
         System.out.println("the pushed card is : " + punishingCard.toString());
     }
 
+    /**
+     * punishes some one for card 7
+     * @param howManyCards is the punishment cards count
+     */
     public void punishPlayerForCard7(int howManyCards){
             ArrayList<Card> addingCards ;
             System.out.println( currentPlayer.getName() +" is punished because of card 7 takes " + howManyCards + " from the card deck");
@@ -338,6 +355,11 @@ public class Game {
 
     }
 
+    /**
+     * adds some card to the hand of the player
+     * @param howMany is the count of the cards
+     * @return the arrayList of the adding cards
+     */
     public ArrayList<Card> addCardsToPlayerHandFromCardDeck(int howMany){
         ArrayList<Card> addingCards = new ArrayList<>();
         Card addingCard;
@@ -349,6 +371,9 @@ public class Game {
         return addingCards;
     }
 
+    /**
+     * resets the game parameters but the count of the punishment cards for card 7 (punishNext)
+     */
     public void resetGameParametersButPunishNext(){
         gameParameters.setChooseToPunish(false);
         gameParameters.setPrize(false);
@@ -356,11 +381,18 @@ public class Game {
         gameParameters.setJump(false);
     }
 
+    /**
+     * prints the winner's name
+     */
     public void printWinner(){
         System.out.println("!!! THE " + players.get(getWinnerIndex()).getName()+ " IS THE WINNER !!!");
 
     }
 
+    /**
+     * prints the losers' names and their score
+     * sorted increasingly by scores
+     */
     public void printLosersNamesAndScores(){
        int counter = 1;
         for(Player player : players){
@@ -371,6 +403,12 @@ public class Game {
         }
         System.out.println();
     }
+
+    /**
+     * sorts the players by their score increasingly
+     * @param players the input players arrayList
+     * @return the sorted players arrayList
+     */
     public ArrayList<Player> sortPlayersByScore(ArrayList<Player> players){
         ArrayList<Player> sortedPlayers= new ArrayList<>();
         int minScore = 1000000;
@@ -395,11 +433,18 @@ public class Game {
     }
 
 
-
+    /**
+     * a method that stops the game for a few seconds
+     * so that players can see what happens
+     * @throws InterruptedException
+     */
     public void delay() throws InterruptedException {
         Thread.sleep(3500);
     }
 
+    /**
+     * prints the direction of the game
+     */
     public void printDirection(){
         if(gameParameters.getStep() == 1){
             System.out.println("Direction : Clockwise");
@@ -410,6 +455,9 @@ public class Game {
         System.out.println();
     }
 
+    /**
+     * prints the players in clockwise direction
+     */
     public void printPlayersInClockwiseDirection(){
         System.out.println("players in clockwise direction are :");
         for(Player player : players){
