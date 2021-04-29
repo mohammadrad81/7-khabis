@@ -128,18 +128,24 @@ public class Game {
                     System.out.println( currentPlayer.getName() + " cards are : ");
                     currentPlayer.printHand();
                     punishPlayerForCard7(gameParameters.getPunishNext());
-                    if(! currentPlayer.has7()){
-                        currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
-                        resetGameParameters();
-                        mustPlay7 = false;
-                        delay();
-                        System.out.println();
-                        continue;
-                    }
-                    else {
-
-                      mustPlay7 = true;
-                    }
+                    currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
+                    resetGameParameters();
+                    mustPlay7 = false;
+                    delay();
+                    System.out.println();
+                    continue;
+//                    if(! currentPlayer.has7()){
+//                        currentPlayer = nextPlayer(currentPlayer , gameParameters.getStep());
+//                        resetGameParameters();
+//                        mustPlay7 = false;
+//                        delay();
+//                        System.out.println();
+//                        continue;
+//                    }
+//                    else {
+//
+//                      mustPlay7 = true;
+//                    }
                 }
            }
 
@@ -359,7 +365,7 @@ public class Game {
        int counter = 1;
         for(Player player : players){
             if(players.indexOf(player) != getWinnerIndex()){
-                System.out.println(counter + "- "+ player.toString());
+                System.out.println(counter + "- "+ player.getName() + " score : " + player.getScore());
                 counter++;
             }
         }
@@ -368,8 +374,8 @@ public class Game {
     public ArrayList<Player> sortPlayersByScore(ArrayList<Player> players){
         ArrayList<Player> sortedPlayers= new ArrayList<>();
         int minScore = 1000000;
-        Player minScorePlayer;
-        Player player = new Player("no one nobody");
+        Player minScorePlayer =  null;
+        Player player = null;
 
         while (players.size() > 0){
             Iterator<Player> it = players.iterator();
@@ -381,8 +387,8 @@ public class Game {
                 }
             }
             minScore = 100000;
-            sortedPlayers.add(player);
-            players.remove(player);
+            sortedPlayers.add(minScorePlayer);
+            players.remove(minScorePlayer);
         }
 
         return sortedPlayers;

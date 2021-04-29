@@ -11,7 +11,8 @@ public class Bot extends Player{
         ArrayList<Card> hand = super.getHand();
         for(int i = 0; i < hand.size() ; i++){
             if(hand.get(i).getColorName().equals(colorName) ||
-                hand.get(i).getSign().equals(sign)){
+                hand.get(i).getSign().equals(sign) ||
+                hand.get(i).getSign().equals("B")){
                 Card card = hand.get(i);
                 hand.remove(card);
 //                System.out.println("bot played " + card.toString());
@@ -40,6 +41,7 @@ public class Bot extends Player{
         }
         return null;
     }
+
     @Override
     public Player chooseToPunish(ArrayList<Player> players){
         Random random = new Random();

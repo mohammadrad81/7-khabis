@@ -49,7 +49,7 @@ public class CardDeck {
         A blackA = new A("A" , ColorNames.BLACK_NAME);
         A redA = new A("A" , ColorNames.RED_NAME);
         A greenA = new A("A" , ColorNames.GREEN_NAME);
-        A blueA = new A("B" , ColorNames.BLUE_NAME);
+        A blueA = new A("A" , ColorNames.BLUE_NAME);
 
         B blackB = new B("B" , ColorNames.BLACK_NAME);
         B redB = new B("B" , ColorNames.RED_NAME);
